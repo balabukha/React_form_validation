@@ -7,7 +7,6 @@ import dateInputMask from './datePlug.js';
 import autoHeight from './textAreaPlug.js';
 import validateEmail from './validateEmail.js';
 
-
 // Components
 import ErrorMessage from './ErrorMessage.jsx'
 
@@ -25,10 +24,9 @@ class Main extends React.Component{
             date: '',
             message: '',
             errorMessage: undefined,
-            errorBtn: undefined
         }
 
-    }
+    };
 
     componentDidMount(){
         var input = document.querySelectorAll('.js-date')[0];
@@ -37,8 +35,6 @@ class Main extends React.Component{
         var textarea = document.querySelector('.auto-expanding');
         autoHeight(textarea);
 
-        let el = document.querySelector('.send-btn');
-        console.log(el)
     }
 
     handleDateChange(e){
@@ -46,6 +42,7 @@ class Main extends React.Component{
         this.setState({
             date: e.target.value
         });
+
         let Year1900 = new Date(1900, 0, 1).getFullYear();
         let now = Date.parse(new Date());
         let mm = `${e.target.value.charAt(3)}${e.target.value.charAt(4)}`;
@@ -60,10 +57,10 @@ class Main extends React.Component{
         let customer18 = 18*365*(3600 * 24 * 1000);
         // let customer74 = 74*365*(3600 * 24 * 1000);
 
-        console.log('state', this.state.date);
-        console.log('currentYear', currentYear);
-        console.log('deltaYear', deltaYear);
-        console.log('Year1900', Year1900);
+        // console.log('state', this.state.date);
+        // console.log('currentYear', currentYear);
+        // console.log('deltaYear', deltaYear);
+        // console.log('Year1900', Year1900);
 
 
 
@@ -77,6 +74,7 @@ class Main extends React.Component{
                 errorMessage: undefined
             });
         };
+
         if (yyyy < Year1900 || dateForm > now) {
             console.log('error');
             this.setState({
@@ -87,14 +85,14 @@ class Main extends React.Component{
                 date: e.target.value
             })
         }
+
+
     }
 
     handleNameChange(e){
         this.setState({
             name: e.target.value
         });
-
-
     }
 
     handleEmailChange(e){
@@ -108,6 +106,7 @@ class Main extends React.Component{
         this.setState({
             message: e.target.value
         });
+        // validateFields();
     }
 
     handleDeleteAllFields(){
@@ -116,7 +115,7 @@ class Main extends React.Component{
             email: '',
             date: '',
             message: '',
-            errorMessage: undefined
+            errorMessage: undefined,
         });
     }
 
@@ -129,7 +128,11 @@ class Main extends React.Component{
             this.state.message !== '' &&
             this.state.errorMessage === undefined
         ) {
+                // this.setState({
+                //     errorBtn: false
+                // });
             console.log(this.state);
+
 
         } else {
             console.log('BIG ERROR');
@@ -137,30 +140,23 @@ class Main extends React.Component{
         }
     }
 
-    validateFields(){
-        if (this.state.name !== '' &&
+
+
+
+    render(){
+
+        let validate =
+            this.state.name !== '' &&
             this.state.date !== '' &&
             validateEmail(this.state.email) &&
             this.state.message !== '' &&
             this.state.errorMessage === undefined
-        ) {
-            this.setState({
-                errorBtn: false
-            })
-        } else
-            {
-            this.setState({
-                errorBtn: true
-            })
-        }
+        ;
 
-    }
-
-
-    render(){
         return(
 
            <div className="wrap">
+               {console.log(validate)}
                <h1>Отправить сообщение</h1>
                <h2>Анонимные собщения рассматриваются</h2>
 
@@ -238,11 +234,13 @@ class Main extends React.Component{
 
 
                        <input type="submit"
-                              className="button send-btn"
+                              className={!validate ?
+                                  "button send-btn" : "button send-btn-active"
+                              }
                               value="Отправить"
-                              // disabled={
-                              //      this.state.errorBtn ? false : true
-                              //   }
+                                disabled={
+                                    !validate
+                                   }
                               onClick={this.handleSubmitForm.bind(this)}
                        />
                    </div>
